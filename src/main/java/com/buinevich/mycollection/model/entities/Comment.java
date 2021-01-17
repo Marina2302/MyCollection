@@ -27,8 +27,10 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", unique = true)
     private long id;
-    @Column(name = "author")
+    @ManyToOne
+    @JoinColumn(name = "author", referencedColumnName = "id")
     private User author;
+
     @Column(name = "text")
     private String text;
 

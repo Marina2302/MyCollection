@@ -13,8 +13,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 
@@ -41,9 +40,11 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToOne
-    @JoinColumn(name = "collections", referencedColumnName = "id")
+    @OneToMany(mappedBy = "owner")
     private List<Collection> collections;
+
+    @OneToMany(mappedBy = "author")
+    private List<Comment> comments;
 
     public User(String login, String password) {
         this.login = login;
