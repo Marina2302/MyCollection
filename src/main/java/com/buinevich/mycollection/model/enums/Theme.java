@@ -1,4 +1,4 @@
-package com.buinevich.mycollection.model.entities;
+package com.buinevich.mycollection.model.enums;
 
 public enum Theme {
     BOOKS,

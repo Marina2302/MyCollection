@@ -1,5 +1,6 @@
 package com.buinevich.mycollection.model.entities;
 
+import com.buinevich.mycollection.model.enums.Theme;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,11 +44,9 @@ public class Collection {
     private Theme theme;
 
     @ManyToMany(mappedBy = "collections", fetch = FetchType.LAZY)
-    @Column(name = "tags")
     private List<Tag> tags;
 
     @ManyToMany(mappedBy = "collections", fetch = FetchType.LAZY)
-    @Column(name = "items")
     private List<Item> items;
 
     @ManyToOne
