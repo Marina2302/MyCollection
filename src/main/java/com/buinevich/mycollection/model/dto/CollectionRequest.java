@@ -6,12 +6,21 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class CollectionRequest {
+    //TODO
+    @NotBlank(message = "Name is mandatory field.")
     private String name;
     private String description;
+    private String image;
+    @NotBlank(message = "theme is mandatory field.")
     private Theme theme;
+    private List<String> tags;
+    private long ownerId;
 }

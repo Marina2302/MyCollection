@@ -1,9 +1,6 @@
 package com.buinevich.mycollection.model.dto;
 
-import com.buinevich.mycollection.model.entities.Item;
-import com.buinevich.mycollection.model.entities.Tag;
 import com.buinevich.mycollection.model.enums.Theme;
-import com.buinevich.mycollection.model.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +20,7 @@ public class CollectionResponse {
     private String description;
     private String image;
     private Theme theme;
-    private List<Tag> tags;
-    private List<Item> items;
-    private User owner;
+    private List<String> tags;
+    private List<ItemResponse> items;
+    private long ownerId;
 }

@@ -46,7 +46,7 @@ public class User {
     private String password;
 
     @ElementCollection(targetClass = Role.class)
-    @CollectionTable(name = "roles", joinColumns = @JoinColumn(name = "id_user"))
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();

@@ -9,6 +9,8 @@ import com.buinevich.mycollection.model.enums.Status;
 import com.buinevich.mycollection.model.mappers.UserMapper;
 import com.buinevich.mycollection.model.repositories.UserRepo;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -63,8 +65,19 @@ public class UserService {
         user.setStatus(status);
     }
 
-    public void changeUserRole(long id, HashSet<Role> roles) {
+    public void changeUserRoles(long id, HashSet<Role> roles) {
         User user = userRepo.findById(id).orElseThrow(() -> new NotFoundException(USER_NOT_FOUND));
         user.setRoles(roles);
+    }
+
+    public User getCurrentUser() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String login;
+        if (principal instanceof UserDetails) {
+            login = ((UserDetails) principal).getUsername();
+        } else {
+            login = principal.toString();
+        }
+        return userRepo.findByLogin(login).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
     }
 }

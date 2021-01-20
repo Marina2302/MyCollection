@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -36,14 +35,13 @@ public class CollectionController {
 
     @PostMapping
     @Transactional
-    public CollectionResponse createCollection(@Valid @RequestBody CollectionRequest collectionRequest) {
-
+    public CollectionResponse createCollection(@RequestBody CollectionRequest collectionRequest) {
         return collectionService.createCollection(collectionRequest);
     }
 
     @PutMapping(path = "/{id}")
     @Transactional
-    public CollectionResponse update(@PathVariable long id, @Valid @RequestBody CollectionRequest collectionRequest) {
+    public CollectionResponse update(@PathVariable long id, @RequestBody CollectionRequest collectionRequest) {
         return collectionService.updateCollection(id, collectionRequest);
     }
 

@@ -1,9 +1,12 @@
 package com.buinevich.mycollection.services;
 
+import com.buinevich.mycollection.exceptions.AccessException;
 import com.buinevich.mycollection.exceptions.NotFoundException;
 import com.buinevich.mycollection.model.dto.CollectionRequest;
 import com.buinevich.mycollection.model.dto.CollectionResponse;
 import com.buinevich.mycollection.model.entities.Collection;
+import com.buinevich.mycollection.model.entities.User;
+import com.buinevich.mycollection.model.enums.Role;
 import com.buinevich.mycollection.model.mappers.CollectionMapper;
 import com.buinevich.mycollection.model.repositories.CollectionRepo;
 import lombok.AllArgsConstructor;
@@ -17,15 +20,26 @@ import java.util.stream.Collectors;
 public class CollectionService {
 
     private static final String COLLECTION_NOT_FOUND = "Collection not found.";
+    private static final String NOT_ENOUGH_RIGHTS = "Not enough rights.";
 
     private CollectionRepo collectionRepo;
     private CollectionMapper collectionMapper;
+    private UserService userService;
 
     public CollectionResponse createCollection(CollectionRequest collectionRequest) {
-        //TODO  - add admin check
+        rightsValidation(collectionRequest);
         Collection newCollection = collectionMapper.collectionRequestToCollection(collectionRequest);
         collectionRepo.save(newCollection);
         return collectionMapper.collectionToCollectionResponse(newCollection);
+    }
+
+    private void rightsValidation(CollectionRequest collectionRequest) {
+        User currentUser = userService.getCurrentUser();
+        if(!currentUser.getRoles().contains(Role.ADMIN)){
+            if(currentUser.getId() != collectionRequest.getOwnerId()){
+                throw new AccessException(NOT_ENOUGH_RIGHTS);
+            }
+        }
     }
 
     public List<CollectionResponse> getAllCollections() {

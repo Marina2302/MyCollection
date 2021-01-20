@@ -27,6 +27,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    // TODO probably not needed
     @GetMapping("/{id}")
     public UserResponse getUser(@PathVariable long id) {
         return userService.getUser(id);
@@ -39,7 +40,7 @@ public class UserController {
 
     @PatchMapping("role/{id}")
     public void changeUserRole(@PathVariable long id, @RequestParam("status") HashSet<Role> roles) {
-        userService.changeUserRole(id, roles);
+        userService.changeUserRoles(id, roles);
     }
 
 }
