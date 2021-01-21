@@ -1,19 +1,18 @@
 package com.buinevich.mycollection.model.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
-
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItemRequest {
-    @NotBlank(message = "Name is mandatory field.")
-    private String name;
-    private String description;
-    private String image;
+public class CommentResponse {
+    long id;
+    String author;
+    String text;
 }

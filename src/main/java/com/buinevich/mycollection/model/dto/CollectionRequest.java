@@ -14,12 +14,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CollectionRequest {
-    //TODO
     @NotBlank(message = "Name is mandatory field.")
     private String name;
     private String description;
     private String image;
-    @NotBlank(message = "theme is mandatory field.")
+    @NotBlank(message = "Theme is mandatory field.")
     private Theme theme;
     private List<String> tags;
     private long ownerId;

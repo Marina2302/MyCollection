@@ -59,18 +59,4 @@ public class Item {
             uniqueConstraints = {@UniqueConstraint(name = "UK_user_id_item_id", columnNames = {"user_id", "item_id"})})
     private Set<User> usersLiked = new HashSet<>();
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Item)) return false;
-
-        Item item = (Item) o;
-
-        return id == item.id;
-    }
-
-    @Override
-    public int hashCode() {
-        return (int) (id ^ (id >>> 32));
-    }
 }

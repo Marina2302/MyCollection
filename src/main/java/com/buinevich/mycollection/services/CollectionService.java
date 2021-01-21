@@ -43,7 +43,6 @@ public class CollectionService {
     }
 
     public List<CollectionResponse> getAllCollections() {
-        //TODO  - change to use query
         return collectionRepo.findAll().stream()
                 .map(collection -> collectionMapper.collectionToCollectionResponse(collection))
                 .collect(Collectors.toList());
