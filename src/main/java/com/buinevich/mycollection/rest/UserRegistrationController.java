@@ -23,7 +23,7 @@ public class UserRegistrationController {
 
     @PostMapping("/register")
     public String registerUser(@RequestBody @Valid AuthRequest AuthRequest) {
-        userService.save(AuthRequest);
+        userService.createUser(AuthRequest);
         return "OK";
     }
 

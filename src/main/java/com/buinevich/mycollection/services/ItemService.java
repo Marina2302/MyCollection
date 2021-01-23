@@ -45,4 +45,25 @@ public class ItemService {
     public void deleteItem(long itemId) {
         itemRepo.deleteById(itemId);
     }
+
+    public Item createItem(Item item) {
+        return itemRepo.save(item);
+    }
+
+    public Item updateItem(long itemId, Item itemRequest) {
+        Item updatedItem = itemRepo.findById(itemId).orElseThrow(() -> new NotFoundException(ITEM_NOT_FOUND));
+        updateItemFields(itemRequest, updatedItem);
+        return itemRepo.save(updatedItem);
+    }
+
+    private void updateItemFields(Item itemRequest, Item updatedItem) {
+        if (itemRequest.getName() != null) updatedItem.setName(itemRequest.getName());
+        if (itemRequest.getDescription() != null) updatedItem.setDescription(itemRequest.getDescription());
+        if (itemRequest.getImage() != null) updatedItem.setImage(itemRequest.getImage());
+    }
+
+    public Item getItem(long id) {
+        return itemRepo.findById(id).orElseThrow(() -> new NotFoundException(ITEM_NOT_FOUND));
+    }
+
 }

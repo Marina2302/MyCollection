@@ -1,5 +1,6 @@
 package com.buinevich.mycollection.services;
 
+import com.buinevich.mycollection.exceptions.ConflictException;
 import com.buinevich.mycollection.exceptions.NotFoundException;
 import com.buinevich.mycollection.model.dto.AuthRequest;
 import com.buinevich.mycollection.model.dto.UserResponse;
@@ -26,15 +27,24 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private static final String USER_NOT_FOUND = "User not found.";
+    private static final String USER_ALREADY_EXISTS = "User with this login already exists.";
     private static final String INVALID_CREDENTIALS = "Invalid name or password.";
 
     private UserRepo userRepo;
     private BCryptPasswordEncoder passwordEncoder;
     private UserMapper userMapper;
 
-    public User save(AuthRequest authRequest) {
+    public User createUser(AuthRequest authRequest) {
         authRequest.setPassword(passwordEncoder.encode(authRequest.getPassword()));
+        if (userRepo.existsByLogin(authRequest.getLogin())) {
+            throw new ConflictException(USER_ALREADY_EXISTS);
+        }
         User createdUser = userMapper.userRequestToUser(authRequest);
+        if (userRepo.findAll().isEmpty()) {
+            createdUser.getRoles().add(Role.ADMIN);
+        }
+        createdUser.setStatus(Status.ACTIVE);
+        createdUser.getRoles().add(Role.USER);
         return userRepo.save(createdUser);
     }
 

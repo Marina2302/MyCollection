@@ -1,28 +1,40 @@
 package com.buinevich.mycollection.model.mappers;
 
+import com.buinevich.mycollection.exceptions.NotFoundException;
 import com.buinevich.mycollection.model.dto.ItemRequest;
 import com.buinevich.mycollection.model.dto.ItemResponse;
-import com.buinevich.mycollection.model.entities.Comment;
+import com.buinevich.mycollection.model.entities.Collection;
 import com.buinevich.mycollection.model.entities.Item;
 import com.buinevich.mycollection.model.entities.User;
+import com.buinevich.mycollection.model.repositories.CollectionRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Component
 public class ItemMapper {
 
+    private static final String COLLECTION_NOT_FOUND = "Collection not found.";
+
     private CollectionMapper collectionMapper;
+    private CollectionRepo collectionRepo;
     private CommentMapper commentMapper;
 
     public Item itemRequestToItem(ItemRequest itemRequest) {
-        return Item.builder()
+        Item.ItemBuilder itemBuilder = Item.builder()
                 .name(itemRequest.getName())
                 .description(itemRequest.getDescription())
-                .image(itemRequest.getImage())
-                .build();
+                .image(itemRequest.getImage());
+        if (itemRequest.getCollectionId() != null) {
+            ArrayList<Collection> collections = new ArrayList<>();
+            collections.add(collectionRepo.findById(itemRequest.getCollectionId())
+                    .orElseThrow(() -> new NotFoundException(COLLECTION_NOT_FOUND)));
+            itemBuilder.collections(collections);
+        }
+        return itemBuilder.build();
     }
 
     public ItemResponse itemToItemResponse(Item item) {

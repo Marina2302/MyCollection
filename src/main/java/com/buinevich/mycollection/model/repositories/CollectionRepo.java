@@ -4,7 +4,10 @@ import com.buinevich.mycollection.model.entities.Collection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface CollectionRepo extends JpaRepository<Collection, Long> {
-    boolean existsByName(String name);
+
+    List<Collection> findAllByOwnerId(long ownerId);
 }

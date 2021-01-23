@@ -1,9 +1,11 @@
 package com.buinevich.mycollection.rest;
 
 import com.buinevich.mycollection.model.dto.CommentResponse;
+import com.buinevich.mycollection.model.dto.ItemRequest;
 import com.buinevich.mycollection.model.dto.ItemResponse;
 import com.buinevich.mycollection.model.mappers.CommentMapper;
 import com.buinevich.mycollection.model.mappers.ItemMapper;
+import com.buinevich.mycollection.services.CollectionService;
 import com.buinevich.mycollection.services.CommentService;
 import com.buinevich.mycollection.services.ItemService;
 import lombok.AllArgsConstructor;
@@ -30,6 +32,7 @@ public class ItemController {
     private ItemMapper itemMapper;
     private CommentService commentService;
     private CommentMapper commentMapper;
+    private CollectionService collectionService;
 
     @GetMapping("/find")
     public Collection<ItemResponse> findItems(@RequestParam String param) {
@@ -45,14 +48,26 @@ public class ItemController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping
-    public void create() {
-
+    @GetMapping("/collection/{id}")
+    public Collection<ItemResponse> getAllItemsByCollectionId(@PathVariable long id) {
+        return collectionService.getCollection(id).getItems().stream()
+                .map(item -> itemMapper.itemToItemResponse(item))
+                .collect(Collectors.toList());
     }
 
-    @PutMapping
-    public void update() {
+    @GetMapping("/{id}")
+    public ItemResponse getItem(@PathVariable long id) {
+        return itemMapper.itemToItemResponse(itemService.getItem(id));
+    }
 
+    @PostMapping
+    public ItemResponse create(@RequestBody ItemRequest itemRequest) {
+        return itemMapper.itemToItemResponse(itemService.createItem(itemMapper.itemRequestToItem(itemRequest)));
+    }
+
+    @PutMapping("/{id}")
+    public ItemResponse update(@PathVariable long id, @RequestBody ItemRequest itemRequest) {
+        return itemMapper.itemToItemResponse(itemService.updateItem(id, itemMapper.itemRequestToItem(itemRequest)));
     }
 
     @PatchMapping("/{id}/comment")

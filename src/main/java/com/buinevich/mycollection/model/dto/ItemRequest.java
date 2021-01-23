@@ -16,4 +16,5 @@ public class ItemRequest {
     private String name;
     private String description;
     private String image;
+    private Long collectionId;
 }
