@@ -1,5 +1,6 @@
 package com.buinevich.mycollection.config;
 
+import com.buinevich.mycollection.model.entities.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -22,11 +23,12 @@ public class JwtProvider {
     @Value("$(jwt.secret)")
     private String jwtSecret;
 
-    public String generateToken(String login, long id) {
+    public String generateToken(User user) {
         Date date = Date.from(LocalDate.now().plusDays(15).atStartOfDay(ZoneId.systemDefault()).toInstant());
         return Jwts.builder()
-                .setSubject(login)
-                .claim("id", id)
+                .setSubject(user.getLogin())
+                .claim("id", user.getId())
+                .claim("roles", user.getRoles())
                 .setExpiration(date)
                 .signWith(SignatureAlgorithm.HS512, jwtSecret)
                 .compact();

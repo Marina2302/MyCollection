@@ -6,6 +6,7 @@ import com.buinevich.mycollection.model.entities.Item;
 import com.buinevich.mycollection.model.repositories.ItemRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class ItemService {
 

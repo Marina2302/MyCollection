@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping
 @AllArgsConstructor
@@ -22,7 +20,7 @@ public class UserRegistrationController {
     private JwtProvider jwtProvider;
 
     @PostMapping("/register")
-    public String registerUser(@RequestBody @Valid AuthRequest AuthRequest) {
+    public String registerUser(@RequestBody AuthRequest AuthRequest) {
         userService.createUser(AuthRequest);
         return "OK";
     }
@@ -30,7 +28,7 @@ public class UserRegistrationController {
     @PostMapping("/auth")
     public AuthResponse auth(@RequestBody AuthRequest request) {
         User user = userService.findByLoginAndPassword(request.getLogin(), request.getPassword());
-        String token = jwtProvider.generateToken(user.getLogin(), user.getId());
+        String token = jwtProvider.generateToken(user);
         return new AuthResponse(token);
     }
 }

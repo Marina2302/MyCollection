@@ -1,6 +1,7 @@
 package com.buinevich.mycollection.model.mappers;
 
 import com.buinevich.mycollection.exceptions.NotFoundException;
+import com.buinevich.mycollection.model.dto.ItemCollectionResponse;
 import com.buinevich.mycollection.model.dto.ItemRequest;
 import com.buinevich.mycollection.model.dto.ItemResponse;
 import com.buinevich.mycollection.model.entities.Collection;
@@ -19,7 +20,6 @@ public class ItemMapper {
 
     private static final String COLLECTION_NOT_FOUND = "Collection not found.";
 
-    private CollectionMapper collectionMapper;
     private CollectionRepo collectionRepo;
     private CommentMapper commentMapper;
 
@@ -44,7 +44,10 @@ public class ItemMapper {
                 .description(item.getDescription())
                 .image(item.getImage())
                 .collections(item.getCollections().stream()
-                        .map(collection -> collectionMapper.collectionToCollectionResponse(collection))
+                        .map(collection -> ItemCollectionResponse.builder()
+                                .id(collection.getId())
+                                .name(collection.getName())
+                                .build())
                         .collect(Collectors.toList()))
                 .comments(item.getComments().stream()
                         .map(comment -> commentMapper.commentToCommentResponse(comment))

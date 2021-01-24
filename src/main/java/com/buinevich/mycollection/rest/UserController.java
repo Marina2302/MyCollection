@@ -5,6 +5,8 @@ import com.buinevich.mycollection.model.enums.Role;
 import com.buinevich.mycollection.model.enums.Status;
 import com.buinevich.mycollection.services.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,7 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@PreAuthorize("hasRole('ROLE_ADMIN')")
 @RequestMapping(path = "/users")
 public class UserController {
 
@@ -33,12 +36,17 @@ public class UserController {
         return userService.getUser(id);
     }
 
-    @PatchMapping("status/{id}")
+    @DeleteMapping("/{id}")
+    public void deleteUser(@PathVariable long id) {
+        userService.deleteUser(id);
+    }
+
+    @PatchMapping("/status/{id}")
     public void changeUserStatus(@PathVariable long id, @RequestParam("status") Status status) {
         userService.changeUserStatus(id, status);
     }
 
-    @PatchMapping("role/{id}")
+    @PatchMapping("/role/{id}")
     public void changeUserRole(@PathVariable long id, @RequestParam("status") HashSet<Role> roles) {
         userService.changeUserRoles(id, roles);
     }

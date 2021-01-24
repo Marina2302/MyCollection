@@ -9,6 +9,7 @@ import com.buinevich.mycollection.model.mappers.CollectionMapper;
 import com.buinevich.mycollection.services.CollectionService;
 import com.buinevich.mycollection.services.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,8 +53,8 @@ public class CollectionController {
         return collectionMapper.collectionToCollectionResponse(collectionService.getCollection(id));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @PostMapping
-    @Transactional
     public CollectionResponse createCollection(@RequestBody CollectionRequest collectionRequest) {
         rightsValidation(collectionRequest);
         return collectionMapper.collectionToCollectionResponse(
@@ -62,20 +63,21 @@ public class CollectionController {
 
     private void rightsValidation(CollectionRequest collectionRequest) {
         User currentUser = userService.getCurrentUser();
-        if (!currentUser.getRoles().contains(Role.ADMIN)) {
+        if (!currentUser.getRoles().contains(Role.ROLE_ADMIN)) {
             if (currentUser.getId() != collectionRequest.getOwnerId()) {
                 throw new AccessException(NOT_ENOUGH_RIGHTS);
             }
         }
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @PutMapping(path = "/{id}")
-    @Transactional
     public CollectionResponse update(@PathVariable long id, @RequestBody CollectionRequest collectionRequest) {
         return collectionMapper.collectionToCollectionResponse(
                 collectionService.updateCollection(id, collectionMapper.collectionRequestToCollection(collectionRequest)));
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_USER')")
     @DeleteMapping(path = "/{id}")
     public void delete(@PathVariable long id) {
         collectionService.deleteCollection(id);

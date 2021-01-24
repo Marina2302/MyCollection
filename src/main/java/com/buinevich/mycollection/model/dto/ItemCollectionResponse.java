@@ -6,19 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ItemResponse {
+public class ItemCollectionResponse {
     private long id;
     private String name;
-    private String description;
-    private String image;
-    private List<ItemCollectionResponse> collections;
-    private List<CommentResponse> comments;
-    private List<Long> userLikedIds;
 }

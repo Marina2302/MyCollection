@@ -41,10 +41,10 @@ public class UserService {
         }
         User createdUser = userMapper.userRequestToUser(authRequest);
         if (userRepo.findAll().isEmpty()) {
-            createdUser.getRoles().add(Role.ADMIN);
+            createdUser.getRoles().add(Role.ROLE_ADMIN);
         }
         createdUser.setStatus(Status.ACTIVE);
-        createdUser.getRoles().add(Role.USER);
+        createdUser.getRoles().add(Role.ROLE_USER);
         return userRepo.save(createdUser);
     }
 
@@ -89,5 +89,9 @@ public class UserService {
             login = principal.toString();
         }
         return userRepo.findByLogin(login).orElseThrow(() -> new UsernameNotFoundException(USER_NOT_FOUND));
+    }
+
+    public void deleteUser(long id) {
+        userRepo.deleteById(id);
     }
 }

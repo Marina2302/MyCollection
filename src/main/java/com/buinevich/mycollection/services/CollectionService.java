@@ -1,19 +1,16 @@
 package com.buinevich.mycollection.services;
 
-import com.buinevich.mycollection.exceptions.AccessException;
 import com.buinevich.mycollection.exceptions.NotFoundException;
-import com.buinevich.mycollection.model.dto.CollectionRequest;
-import com.buinevich.mycollection.model.dto.CollectionResponse;
 import com.buinevich.mycollection.model.entities.Collection;
-import com.buinevich.mycollection.model.entities.User;
-import com.buinevich.mycollection.model.enums.Role;
 import com.buinevich.mycollection.model.repositories.CollectionRepo;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class CollectionService {
 
